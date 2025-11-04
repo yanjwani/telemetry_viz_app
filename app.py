@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 # ---------------------------------------------------------
 # Page setup
 # ---------------------------------------------------------
-st.set_page_config(page_title="Vroom Vroom", layout="wide")
+st.set_page_config(page_title="F1 Telemetry App", layout="wide")
 st.title("🏎️ Lap Telemetry")
 
 # ---------------------------------------------------------
