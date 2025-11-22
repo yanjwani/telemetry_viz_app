@@ -122,17 +122,21 @@ if driver1 and driver2:
         delta = lap_time_d1 - lap_time_d2
         if delta.total_seconds() < 0:
             faster_driver = driver1
-        else:
+        elif delta.total_seconds() > 0:
             faster_driver = driver2
+        else:
+            faster_driver = "Equal Times"
         time_diff = abs(delta.total_seconds())
 
         st.markdown("### Lap Time Summary")
         col_a, col_b, col_c = st.columns(3)
         col_a.metric(driver1, format_laptime(lap_time_d1))
         col_b.metric(driver2, format_laptime(lap_time_d2))
-        col_c.metric("Faster Driver", faster_driver, f"{time_diff:.3f} s faster")
-
-        st.success(f"**{faster_driver}** was quicker by **{time_diff:.3f} seconds** in this lap.")
-
+        if faster_driver == "Equal Times":
+            col_c.metric("Faster Driver", faster_driver, f"{time_diff:.3f} s faster", delta_color="off") 
+            st.success(f"Both drivers had the same lap time in this lap.")
+        else:
+            col_c.metric("Faster Driver", faster_driver, f"{time_diff:.3f} s faster")
+            st.success(f"**{faster_driver}** was quicker by **{time_diff:.3f} seconds** in this lap.")
 else:
     st.warning("Please select both drivers to compare their laps.")
