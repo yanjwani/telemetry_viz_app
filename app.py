@@ -15,18 +15,18 @@ st.title("🏎️ Lap Telemetry")
 # ---------------------------------------------------------
 @st.cache_data(show_spinner=True)
 def get_race_schedule(year):
-    """Fetch race schedule for a given year."""
+    # Fetch race schedule for a given year.
     return f1.get_event_schedule(year)
 
 @st.cache_data(show_spinner=True)
 def load_session(year, race_name, session_type):
-    """Load a FastF1 session (cached)."""
+    # Load a FastF1 session (cached).
     session = f1.get_session(year, race_name, session_type)
     session.load()
     return session
 
 def get_driver_color(driver_code, session):
-    """Return the official team color for a driver."""
+    # Return the official team color for a driver.
     return fastf1.plotting.get_driver_color(driver_code, session)
 
 def format_laptime(td):
@@ -47,9 +47,7 @@ with st.sidebar:
     race_name = st.selectbox("Race", schedule["EventName"].tolist())
     session_type = st.selectbox("Session", ["R", "Q", "FP1", "FP2", "FP3"])
 
-# ---------------------------------------------------------
-# Load session data
-# ---------------------------------------------------------
+
 session = load_session(year, race_name, session_type)
 session_drivers = session.results["Abbreviation"].tolist()
 
@@ -60,9 +58,9 @@ with col2:
     driver2 = st.selectbox("Driver 2", session_drivers, key="d2")
 
 if driver1 and driver2:
-    # Fetch driver laps
-    laps_d1 = session.laps.pick_driver(driver1)
-    laps_d2 = session.laps.pick_driver(driver2)
+    # Get driver laps
+    laps_d1 = session.laps.pick_drivers(driver1)
+    laps_d2 = session.laps.pick_drivers(driver2)
 
     compare_fastest_lap =st.toggle("Compare Fastest Lap", value=True)
 
@@ -77,7 +75,7 @@ if driver1 and driver2:
         with col4:
             lap_d2_num = st.selectbox(f"{driver2} Lap", laps_d2["LapNumber"], key="lap_d2")
 
-        # Extract telemetry
+        # Get telemetry
         lap_d1 = laps_d1.pick_laps(lap_d1_num).iloc[0]
         lap_d2 = laps_d2.pick_laps(lap_d2_num).iloc[0]
     
